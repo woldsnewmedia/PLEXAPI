@@ -82,7 +82,6 @@ namespace PLEXAPI.Controllers
 
             IActionResult response = Unauthorized();
 
-            //var user = AuthenticateUserPostAsync(login);
             JWTLoginModel user = await AuthenticateUserPostAsync(login);
 
             if (user != null)
@@ -99,9 +98,10 @@ namespace PLEXAPI.Controllers
         private async Task<JWTLoginModel> AuthenticateUserPostAsync(JWTLoginModel login)
         {
 
-            var user = await _context.APIUser.FirstOrDefaultAsync(x => x.Username == login.Username); //Get user from database.
+            var user = await _context.APIUser.FirstOrDefaultAsync(x => x.Username == login.Username);
+
             if (user == null)
-                return null; // User does not exist.
+                return null;
 
             if (!VerifyPassword(login.Password, user.PasswordHash, user.PasswordSalt))
                 return null;
@@ -114,18 +114,18 @@ namespace PLEXAPI.Controllers
 
         }
 
-        // PW verify
+        // PW verify - hash pw passed in and compare
         private bool VerifyPassword(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
             {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password)); // Create hash using password salt.
-                for (int i = 0; i < computedHash.Length; i++)
-                { // Loop through the byte array
-                    if (computedHash[i] != passwordHash[i]) return false; // if mismatch
+                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                for (int i = 0; i < computedHash.Length; i++)   // mismatch check
+                {
+                    if (computedHash[i] != passwordHash[i]) return false;
                 }
             }
-            return true; //if no mismatches.
+            return true;
         }
 
         // Create token
