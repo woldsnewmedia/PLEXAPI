@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PLEXAPI.Models;
+using PLEXAPI.Models.Account;
 
 namespace PLEXAPI.Data
 {
@@ -15,9 +16,7 @@ namespace PLEXAPI.Data
         {
         }
 
-        public DbSet<Country> Country { get; set; }
-
-
+        public DbSet<APIUser> APIUser { get; set; }
 
     }
 }

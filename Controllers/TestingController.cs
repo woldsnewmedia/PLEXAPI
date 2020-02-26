@@ -30,8 +30,18 @@ namespace PLEXAPI.Controllers
         }
 
         /*
-         * Testing function
+         * Testing functions
          */ 
+        // Public index dummy page (test)
+        [HttpGet]
+        [Route("/")]
+        [AllowAnonymous]
+        public ContentResult PublicIndex()
+        {
+            return Content("API");
+        }
+
+        // Return test data
         [HttpGet]
         [Route("/Testing")]
         public IEnumerable<TestingDataVM> Testing1()
